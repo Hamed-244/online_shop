@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+
+  database:
+    image: postgres:16.2
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER : hamed_user
+      POSTGRES_PASSWORD : ThisIsJustAPassword
+      POSTGRES_DB : online_shop
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres_data:/data/postgres
+  
+  backend:
+    build: ./backend
+    depends_on:
+      - database
+    ports:
+      - 8080:8080
+    restart: always
+    command: "gunicorn --config wsgi.py core.app:app"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    command: "npm start"
+    volumes: 
+      - ./frontend:/app
