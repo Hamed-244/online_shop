@@ -21,7 +21,7 @@ services:
     ports:
       - 8080:8080
     restart: always
-    command: "gunicorn --config wsgi.py core.app:app"
+    command: "gunicorn --config wsgi.py app:app"
 
   frontend:
     build: ./frontend

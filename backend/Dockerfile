@@ -6,4 +6,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 EXPOSE 8080
-CMD ["gunicorn","--config", "wsgi.py", "core.app:app"]
+CMD ["gunicorn","--config", "wsgi.py", "app:app"]
