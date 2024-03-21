@@ -7,9 +7,8 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER : hamed_user
+      POSTGRES_USER : admin_user
       POSTGRES_PASSWORD : ThisIsJustAPassword
-      POSTGRES_DB : online_shop
       PGDATA: /data/postgres
     volumes:
       - ./postgres_data:/data/postgres
@@ -21,12 +20,10 @@ services:
     ports:
       - 8080:8080
     restart: always
-    command: "gunicorn --config wsgi.py app:app"
+    command: "python manage.py runserver 0.0.0.0:8080"
 
   frontend:
     build: ./frontend
     ports:
-      - 3000:3000
-    command: "npm start"
-    volumes: 
-      - ./frontend:/app
+      - 5173:5173
+    command: "npm run dev"

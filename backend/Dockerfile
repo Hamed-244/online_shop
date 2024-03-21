@@ -5,5 +5,6 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
+RUN python manage.py makemigrations && python manage.py migrate
 EXPOSE 8080
-CMD ["gunicorn","--config", "wsgi.py", "app:app"]
+CMD ["gunicorn", "configs.wsgi", "-b", "0.0.0.0:8080"]

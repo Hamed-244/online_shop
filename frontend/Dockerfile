@@ -1,10 +1,10 @@
 FROM node:21.7.0-alpine3.19
 WORKDIR /app
 
-COPY package*.json .
-RUN npm install
+COPY package*.json ./
+RUN npm ci
 
 COPY . .
 
-EXPOSE 3000
-CMD ["npm" ,"start"]
+EXPOSE 5173
+CMD ["npm", "run", "dev"]
