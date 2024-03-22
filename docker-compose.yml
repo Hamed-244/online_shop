@@ -7,20 +7,28 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER : admin_user
+      POSTGRES_USER : postgres
       POSTGRES_PASSWORD : ThisIsJustAPassword
       PGDATA: /data/postgres
     volumes:
       - ./postgres_data:/data/postgres
-  
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 2s
+      retries: 100
+    restart: unless-stopped
+
   backend:
     build: ./backend
     depends_on:
-      - database
+      database:
+        condition:
+          service_healthy
     ports:
       - 8080:8080
     restart: always
-    command: "python manage.py runserver 0.0.0.0:8080"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
 
   frontend:
     build: ./frontend

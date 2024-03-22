@@ -1,10 +1,12 @@
-FROM python:3.13-rc-slim-bookworm
+FROM python:3.13.0a1
 WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
-RUN python manage.py makemigrations && python manage.py migrate
 EXPOSE 8080
-CMD ["gunicorn", "configs.wsgi", "-b", "0.0.0.0:8080"]
+CMD bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
