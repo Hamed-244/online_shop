@@ -1,4 +1,9 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+
+# define main variables
+User = get_user_model()
 
 
 class Category(models.Model):
@@ -31,3 +36,17 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class ShippingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=128)
+    address_line1 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255)
+    city = models.CharField(max_length=64)
+    state = models.CharField(max_length=64)
+    postal_code = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.user.username
+
