@@ -50,3 +50,21 @@ class ShippingAddress(models.Model):
     def __str__(self):
         return self.user.username
 
+
+class Order(models.Model):
+
+    status_choices = (
+        ('pending', 'Pending'),
+        ('delivering', 'Delivering'),
+        ('canceled', 'Canceled')
+    )
+
+    user = models.ForeignKey(User, on_delete=models.SET_NULL , null=True)
+    shipping_address = models.ForeignKey('ShippingAddress', on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=status_choices , default='pending')
+    order_date = models.DateTimeField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username
