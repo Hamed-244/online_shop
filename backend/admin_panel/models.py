@@ -68,3 +68,17 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class OrderItem(models.Model):
+    order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def total_price(self):
+        price = self.product.price
+        quantity = self.quantity
+        total_price = price * quantity
+        return total_price
+
+    def __str__(self):
+        return self.product.name
