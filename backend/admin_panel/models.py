@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 # define main variables
@@ -106,3 +107,15 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.order.user.username
+
+
+class Feedback(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="feedback")
+    rating = models.IntegerField(validators=[MaxValueValidator(5),MinValueValidator(0)])
+    comment = models.TextField()
+    feedback_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.order.user.username
+
