@@ -10,7 +10,7 @@ User = get_user_model()
 class Category(models.Model):
     name = models.CharField(max_length=32, unique=True)
     description = models.CharField(max_length=255)
-    parent_category = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name="parent")
+    parent_category = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name="children")
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -24,7 +24,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     amount = models.IntegerField(default=1)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category, blank=True)
 
     def __str__(self):
         return self.name
@@ -40,7 +40,7 @@ class ProductImage(models.Model):
 
 
 class ShippingAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="shipping_addresses")
     title = models.CharField(max_length=128)
     address_line1 = models.CharField(max_length=255)
     address_line2 = models.CharField(max_length=255)
@@ -60,12 +60,19 @@ class Order(models.Model):
         ('canceled', 'Canceled')
     )
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL , null=True)
-    shipping_address = models.ForeignKey('ShippingAddress', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL , null=True, related_name="orders")
+    shipping_address = models.ForeignKey('ShippingAddress', on_delete=models.SET_NULL, null=True, related_name="orders")
     status = models.CharField(max_length=10, choices=status_choices , default='pending')
     order_date = models.DateTimeField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def final_price(self):
+        order_items = self.items
+        count = 0.00
+        for item in order_items :
+            count += item.total_price
+        return count
 
     def __str__(self):
         return self.user.username
@@ -73,11 +80,17 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL , null=True, related_name="orders")
     quantity = models.IntegerField(default=1)
+    purchase_price = models.DecimalField(max_digits=10 , decimal_places=2 , default=0)
+    created_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.purchase_price = self.product.price
+        super().save(*args, **kwargs)
 
     def total_price(self):
-        price = self.product.price
+        price = self.purchase_price
         quantity = self.quantity
         total_price = price * quantity
         return total_price
@@ -127,7 +140,7 @@ class Notice(models.Model):
         ('warn', 'Warn')
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="دotifications")
     type = models.CharField(max_length=10, choices=type_choices, default="success")
     title = models.CharField(max_length=128)
     message = models.TextField()
