@@ -69,6 +69,7 @@ class Order(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -82,3 +83,26 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class Payment(models.Model):
+    status_choices = (
+        ('done', 'Done'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded')
+    )
+
+    payment_method_choices = (
+        ('paypal', 'PayPal'),
+        ('zarinpal', 'ZarinPal')
+    )
+
+    order = models.ForeignKey("Order", on_delete=models.CASCADE , related_name="payment")
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=10, choices=status_choices , default="done")
+    payment_method = models.CharField(max_length=10, choices=payment_method_choices)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.order.user.username
