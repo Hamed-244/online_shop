@@ -119,3 +119,19 @@ class Feedback(models.Model):
     def __str__(self):
         return self.order.user.username
 
+
+class Notice(models.Model):
+    type_choices = (
+        ('danger', 'Danger'),
+        ('success', 'Success'),
+        ('warn', 'Warn')
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=10, choices=type_choices, default="success")
+    title = models.CharField(max_length=128)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
