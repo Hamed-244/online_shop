@@ -1,6 +1,6 @@
 from django.contrib import admin
 from admin_panel.models import Category , Product , ProductImage , ShippingAddress \
-    , Order , OrderItem , Payment
+    , Order , OrderItem , Payment , Feedback
 
 
 
@@ -11,3 +11,4 @@ admin.site.register(ShippingAddress)
 admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(Payment)
+admin.site.register(Feedback)
