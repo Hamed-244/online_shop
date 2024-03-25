@@ -61,7 +61,7 @@ class Order(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL , null=True, related_name="orders")
-    shipping_address = models.ForeignKey('ShippingAddress', on_delete=models.SET_NULL, null=True, related_name="orders")
+    shipping_address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, null=True, related_name="orders")
     status = models.CharField(max_length=10, choices=status_choices , default='pending')
     order_date = models.DateTimeField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -79,7 +79,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.SET_NULL , null=True, related_name="orders")
     quantity = models.IntegerField(default=1)
     purchase_price = models.DecimalField(max_digits=10 , decimal_places=2 , default=0)
@@ -111,7 +111,7 @@ class Payment(models.Model):
         ('zarinpal', 'ZarinPal')
     )
 
-    order = models.ForeignKey("Order", on_delete=models.CASCADE , related_name="payment")
+    order = models.OneToOneField(Order, on_delete=models.CASCADE , related_name="payment")
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=10, choices=status_choices , default="done")
     payment_method = models.CharField(max_length=10, choices=payment_method_choices)
