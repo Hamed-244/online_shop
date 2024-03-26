@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, viewsets
 from admin_panel.serializers import (UserSerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer,
-    OrderSerializer ,OrderItemSerializer ,PaymentSerializer,FeedbackSerializer)
-from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback)
+    OrderSerializer ,OrderItemSerializer ,PaymentSerializer,FeedbackSerializer,NoticeSerializer)
+from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
 
 User = get_user_model()
 
@@ -62,4 +62,10 @@ class PaymentCrudViewSet(viewsets.ModelViewSet):
 class FeedbackCrudViewSet(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class NoticeCrudViewSet(viewsets.ModelViewSet):
+    queryset = Notice.objects.all()
+    serializer_class = NoticeSerializer
     permission_classes = [permissions.IsAdminUser]

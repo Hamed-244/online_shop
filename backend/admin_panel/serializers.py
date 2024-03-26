@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback)
+from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
 
 
 User = get_user_model()
@@ -66,4 +66,11 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
+        fields = "__all__"
+
+
+class NoticeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Notice
         fields = "__all__"
