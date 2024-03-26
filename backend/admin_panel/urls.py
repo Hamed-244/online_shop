@@ -12,6 +12,7 @@ router.register(r'shipping-addresses', views.ShippingAddressCrudViewSet)
 router.register(r'orders', views.OrderCrudViewSet)
 router.register(r'order-items', views.OrderItemCrudViewSet)
 router.register(r'payments', views.PaymentCrudViewSet)
+router.register(r'feedbacks', views.FeedbackCrudViewSet)
 
 urlpatterns = [
 
