@@ -8,6 +8,7 @@ router.register(r'users', views.UsersCrudViewSet)
 router.register(r'products', views.ProductCrudViewSet)
 router.register(r'categories', views.CategoryCrudViewSet)
 router.register(r'product-images', views.ProductImagesCrudViewSet)
+router.register(r'shipping-addresses', views.ShippingAddressCrudViewSet)
 
 urlpatterns = [
 
