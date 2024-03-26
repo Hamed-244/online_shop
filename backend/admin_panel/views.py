@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, viewsets
-from admin_panel.serializers import (UserSerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer)
-from admin_panel.models import (Product, Category, ProductImage, ShippingAddress)
+from admin_panel.serializers import (UserSerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer,
+    OrderSerializer)
+from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order)
 
 User = get_user_model()
 
@@ -37,4 +38,10 @@ class ShippingAddressCrudViewSet(viewsets.ModelViewSet):
 
     queryset = ShippingAddress.objects.all()
     serializer_class = ShippingAddressSerializer
+    permission_classes = [permissions.IsAdminUser]
+    
+
+class OrderCrudViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
     permission_classes = [permissions.IsAdminUser]
