@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from admin_panel.models import (Product,Category)
+from admin_panel.models import (Product,Category,ProductImage)
 
 
 User = get_user_model()
@@ -20,4 +20,10 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
+        fields = "__all__"
+
+
+class ProductImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
         fields = "__all__"
