@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order)
+from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem)
 
 
 User = get_user_model()
@@ -43,3 +43,13 @@ class OrderSerializer(serializers.ModelSerializer):
         
     def get_final_price(self , obj):
         return obj.final_price()
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    total_price = serializers.SerializerMethodField()
+    class Meta:
+        model = OrderItem
+        fields = "__all__"
+        
+    def get_total_price(self , obj):
+        return obj.total_price()
