@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from decimal import Decimal
 
 # define main variables
 User = get_user_model()
@@ -69,9 +69,9 @@ class Order(models.Model):
 
     def final_price(self):
         order_items = self.items
-        count = 0.00
-        for item in order_items :
-            count += item.total_price
+        count = Decimal('0.00')
+        for item in order_items.all() :
+            count += Decimal(str(item.total_price()))
         return count
 
     def __str__(self):
