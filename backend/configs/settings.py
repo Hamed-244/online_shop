@@ -31,7 +31,6 @@ DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,12 +40,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    
     
     # 3rd party apps
     'rest_framework',
-    
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'rest_auth',
+    'rest_auth.registration',
+
     # own apps
     'admin_panel',
+    'authentication'
 ]
 
 MIDDLEWARE = [
@@ -135,3 +142,28 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+####__Add__###
+
+SITE_ID = 1
+
+# For custom user model
+AUTH_USER_MODEL = 'authentication.User'
+
+# For enabling jwt
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'jwt'
+
+# For allauth
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = True
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'online_shop.backend.authentication.serializers.CustomRegisterSerializer',
+}
