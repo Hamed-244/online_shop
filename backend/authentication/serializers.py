@@ -20,3 +20,11 @@ class CustomRegisterSerializer(RegisterSerializer):
             'profile_image': self.validated_data.get('profile_image', ''),
         }
 
+    def save(self, request):
+        user = super().save(request)
+        user.name = self.data.get('name')
+        user.last_name = self.data.get('last_name')
+        user.phone_number = self.data.get('phone_number')
+        user.profile_image = self.validated_data.get('profile_image')
+        user.save()
+        return user
