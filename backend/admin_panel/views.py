@@ -21,6 +21,8 @@ class UsersCrudViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return UserListSerializer
+        elif self.action == "update":
+            return UserUpdateSerializer
         return UserSerializer
     
     # permission_classes = [permissions.IsAdminUser]
