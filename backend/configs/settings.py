@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'corsheaders',
+    'django_filters',
     
     # own apps
     'admin_panel',
@@ -129,7 +130,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+APPEND_SLASH = False
 # DRF settings
 
 REST_FRAMEWORK = {

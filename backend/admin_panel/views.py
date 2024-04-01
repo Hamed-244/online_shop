@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from admin_panel.serializers import (UserSerializer,UserListSerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer,
     OrderSerializer ,OrderItemSerializer ,PaymentSerializer,FeedbackSerializer,NoticeSerializer)
 from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 User = get_user_model()
 
@@ -11,6 +13,10 @@ class UsersCrudViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = '__all__'
+    ordering_fields = '__all__'
+    filterset_fields = '__all__'
     
     def get_serializer_class(self):
         if self.action == "list":
