@@ -1,12 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
-from django.conf import settings
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from dj_rest_auth.registration.views import RegisterView as DefaultRegisterView
 from .serializers import CustomRegisterSerializer
 
@@ -23,4 +14,15 @@ class RegisterView(DefaultRegisterView):
             'profile_image': user.profile_image.url if user.profile_image else None,
         }
 
+from dj_rest_auth.views import PasswordResetView
 
+class CustomPasswordResetView(PasswordResetView):
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+from dj_rest_auth.views import PasswordResetConfirmView
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    pass

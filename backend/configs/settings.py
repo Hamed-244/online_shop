@@ -167,3 +167,5 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'online_shop.backend.authentication.serializers.CustomRegisterSerializer',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
