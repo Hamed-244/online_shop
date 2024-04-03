@@ -14,7 +14,7 @@ class UsersCrudViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
-    search_fields = '__all__'
+    search_fields = ['username' , 'first_name' , 'last_name', 'email']
     ordering_fields = '__all__'
     filterset_fields = '__all__'
     
@@ -32,6 +32,12 @@ class CategoryCrudViewSet(viewsets.ModelViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['name' , 'description']
+    ordering_fields = '__all__'
+    filterset_fields = '__all__'
+    
     # permission_classes = [permissions.IsAdminUser]
 
 

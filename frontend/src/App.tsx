@@ -5,10 +5,10 @@ import {
   EditGuesser,
   ShowGuesser,
 } from "react-admin";
-import { dataProvider } from "./dataProvider";
 import { restDataProvider } from "./restFrameworkDataProvider";
 import { authProvider } from "./authProvider";
 import {UserList, UserShow, UserEdit , UserCreate} from "./resources/users";
+import {CategoryList, CategoryShow, CategoryEdit, CategoryCreate} from "./resources/categories";
 
 export const App = () => (
   <Admin dataProvider={restDataProvider} authProvider={authProvider}>
@@ -18,6 +18,14 @@ export const App = () => (
       edit={UserEdit}
       create={UserCreate}
       show={UserShow}
+    />
+
+    <Resource
+      name="categories"
+      list={CategoryList}
+      edit={CategoryEdit}
+      create={CategoryCreate}
+      show={CategoryShow}
     />
   </Admin>
 );

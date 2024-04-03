@@ -1,22 +1,21 @@
-import { List, Datagrid, TextField, EmailField, BooleanField, NumberField} from "react-admin";
+import { List, Datagrid, TextField, EmailField, BooleanField, NumberField, SearchInput} from "react-admin";
 import { Show, SimpleShowLayout, DateField,} from 'react-admin';
-import { Edit, SimpleForm, TextInput, PasswordInput, DateInput, required, NumberInput, BooleanInput, ArrayInput, SimpleFormIterator } from 'react-admin';
+import { Edit, SimpleForm, TextInput, PasswordInput, DateInput,DateTimeInput, required, NumberInput, BooleanInput, ArrayInput, SimpleFormIterator } from 'react-admin';
 import { Create , Filter} from 'react-admin';
 
-const UserFilter = () => (
-    <Filter>
-        <TextInput label="Search by Username" source="username" alwaysOn />
-        <BooleanInput label="Is Staff?" source="is_staff" />
-        <BooleanInput label="Is Active?" source="is_active" />
-        <TextInput label="Search by First Name" source="first_name" />
-        <TextInput label="Search by Last Name" source="last_name" />
-        <TextInput label="Search by Email" source="email" />
-    </Filter>
-);
+const UserFilter = [
+        <SearchInput source="q" alwaysOn />,
+        <TextInput label="Filter by Username" source="username" />,
+        <BooleanInput label="Is Staff?" source="is_staff" />,
+        <BooleanInput label="Is Active?" source="is_active" />,
+        <TextInput label="Filter by First Name" source="first_name" />,
+        <TextInput label="Filter by Last Name" source="last_name" />,
+        <TextInput label="Filter by Email" source="email" />,
+];
 
 export const UserList = () => (
-    <List filters={UserFilter()}>
-        <Datagrid rowClick="edit">
+    <List filters={UserFilter}>
+        <Datagrid rowClick="show">
             <NumberField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
@@ -55,12 +54,12 @@ export const UserEdit = () => (
             <TextInput label="Username" source="username" validate={required()} />
             <TextInput label="First Name" source="first_name" validate={required()} />
             <TextInput label="Last Name" source="last_name" validate={required()} />
-            <TextInput label="Email" source="email" />
-            <DateInput disabled label="Last login" source="last_login" />
-            <DateInput disabled label="Date Joined" source="date_joined" />
+            <TextInput label="Email" source="email" type="email" />
             <BooleanInput label="Superuser" source="is_superuser" />
             <BooleanInput label="Staff" source="is_staff" />
             <BooleanInput label="Active" source="is_active" />
+            <DateTimeInput disabled label="Last login" source="last_login" />
+            <DateTimeInput disabled label="Date Joined" source="date_joined" />
         </SimpleForm>
     </Edit>
 );
@@ -73,7 +72,7 @@ export const UserCreate = () => (
             <PasswordInput label="Password" source="password" validate={required()} />
             <TextInput label="First Name" source="first_name" validate={required()} />
             <TextInput label="Last Name" source="last_name" validate={required()} />
-            <TextInput label="Email" source="email" validate={required()} />
+            <TextInput label="Email" source="email" validate={required()} type="email" />
             <BooleanInput label="Superuser" source="is_superuser" />
             <BooleanInput label="Staff" source="is_staff" />
             <BooleanInput label="Active" source="is_active" />
