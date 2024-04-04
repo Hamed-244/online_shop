@@ -12,12 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 import environ
 from pathlib import Path
-import django
-from django.utils.encoding import smart_str
-django.utils.encoding.smart_text = smart_str
-import django
-from django.utils.translation import gettext
-django.utils.translation.ugettext = gettext
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +32,7 @@ DEBUG = env.bool('DEBUG')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,20 +44,21 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # 3rd party apps
+    'django.contrib.sites', 
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth',
-
-    'django.contrib.sites', 
+    
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 
     # own apps
     'admin_panel',
     'authentication'
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'configs.urls'
@@ -128,6 +125,53 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# For custom user model
+AUTH_USER_MODEL = 'authentication.User'
+
+# JWT settings
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta( days=7 ),
+    "REFRESH_TOKEN_LIFETIME": timedelta( days=30 ),
+    "UPDATE_LAST_LOGIN": True,
+    'TOKEN_VERIFY_SERIALIZER' : 'authentication.serializers.TokenVerifySerializer' , 
+}
+
+
+# For enabling DJ REST AUTH
+REST_AUTH = {
+    'REGISTER_SERIALIZER' : 'authentication.serializers.CustomRegisterSerializer',
+    
+    'OLD_PASSWORD_FIELD_ENABLED': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
+    'SESSION_LOGIN': True,
+    'USE_JWT': True,
+
+    'JWT_AUTH_COOKIE': "access",
+    'JWT_AUTH_REFRESH_COOKIE': "refresh",
+}
+
+# ALL AUTH SETTINGS
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_UNIQUE_EMAIL = True
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -150,38 +194,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-####__Add__###
-
-SITE_ID = 1
-
-# For custom user model
-AUTH_USER_MODEL = 'authentication.User'
-
-# For enabling jwt
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'jwt'
-
-# For allauth
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_EMAIL_REQUIRED = True
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'online_shop.backend.authentication.serializers.CustomRegisterSerializer',
-}
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-}

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from .validators import username_validator , phonenumber_validator , national_id_validator , profile_picture_validator
+from .validators import username_validator , phonenumber_validator , profile_picture_validator
 
 
 class User(AbstractUser):
@@ -15,8 +15,6 @@ class User(AbstractUser):
             'unique': _("A user with that username already exists."),
         },
     )
-    name = models.CharField(_('name'), max_length=50, blank=True, null=True)
-    last_name = models.CharField(_('last name'), max_length=50, blank=True, null=True)
-    profile_image = models.ImageField(_('profile image'), upload_to='media/user_profile/', null=True, blank=True)
-    phone_number = models.CharField(_('phone number'), max_length=15, blank=True, null=True)
-    email = models.EmailField(_('email address'), blank=True)
+    email = models.EmailField(_("email address"), blank=True, unique=True)
+    profile_image = models.ImageField(_('profile image'), upload_to='media/user_profile/', null=True, blank=True, validators=[profile_picture_validator])
+    phone_number = models.CharField(_('phone number'), max_length=15, blank=True, null=True,validators=[phonenumber_validator])
