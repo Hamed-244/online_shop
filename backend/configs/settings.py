@@ -42,19 +42,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     
-    
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',
+    'dj_rest_auth',
+
     'allauth',
     'allauth.account',
-    'rest_auth',
-    'rest_auth.registration',
-
+    'allauth.socialaccount',
+    
     # own apps
     'admin_panel',
     'authentication'
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'configs.urls'
