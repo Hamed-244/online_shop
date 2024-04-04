@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 import environ
 from pathlib import Path
+import django
+from django.utils.encoding import smart_str
+django.utils.encoding.smart_text = smart_str
+import django
+from django.utils.translation import gettext
+django.utils.translation.ugettext = gettext
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,17 +46,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
 
+    'django.contrib.sites', 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
+
     # own apps
     'admin_panel',
     'authentication'
@@ -171,3 +177,11 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
