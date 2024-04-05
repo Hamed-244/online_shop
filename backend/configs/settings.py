@@ -150,7 +150,8 @@ SIMPLE_JWT = {
 # For enabling DJ REST AUTH
 REST_AUTH = {
     'REGISTER_SERIALIZER' : 'authentication.serializers.CustomRegisterSerializer',
-    
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomRegisterSerializer',
+
     'OLD_PASSWORD_FIELD_ENABLED': True,
     'LOGOUT_ON_PASSWORD_CHANGE': True,
     'SESSION_LOGIN': True,
