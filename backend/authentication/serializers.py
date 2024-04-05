@@ -15,6 +15,7 @@ try:
     from allauth.utils import get_username_max_length
 except ImportError:
     raise ImportError('allauth needs to be added to INSTALLED_APPS.')
+from .models import User
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -70,3 +71,10 @@ class TokenVerifySerializer(serializers.Serializer):
                 raise ValidationError("Token is blacklisted")
 
         return {'detail' : 'ok'}
+    
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude  = ['password', 'groups', 'user_permissions', 'is_active',]
+  
