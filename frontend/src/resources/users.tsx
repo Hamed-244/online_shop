@@ -1,6 +1,6 @@
 import { List, Datagrid, TextField, EmailField, BooleanField, NumberField, SearchInput} from "react-admin";
 import { Show, SimpleShowLayout, DateField,} from 'react-admin';
-import { Edit, SimpleForm, TextInput, PasswordInput, DateInput,DateTimeInput, required, NumberInput, BooleanInput, ArrayInput, SimpleFormIterator } from 'react-admin';
+import { Edit, SimpleForm, TextInput, PasswordInput,DateTimeInput, required, NumberInput, BooleanInput, ArrayInput, SimpleFormIterator } from 'react-admin';
 import { Create , Filter} from 'react-admin';
 
 const UserFilter = [
@@ -50,7 +50,6 @@ export const UserEdit = () => (
     <Edit>
         <SimpleForm>
             <NumberInput disabled label="Id" source="id" />
-            <PasswordInput label="Password" source="password" />
             <TextInput label="Username" source="username" validate={required()} />
             <TextInput label="First Name" source="first_name" validate={required()} />
             <TextInput label="Last Name" source="last_name" validate={required()} />
@@ -58,8 +57,8 @@ export const UserEdit = () => (
             <BooleanInput label="Superuser" source="is_superuser" />
             <BooleanInput label="Staff" source="is_staff" />
             <BooleanInput label="Active" source="is_active" />
-            <DateTimeInput disabled label="Last login" source="last_login" />
-            <DateTimeInput disabled label="Date Joined" source="date_joined" />
+            <DateTimeInput label="Last login" source="last_login" />
+            <DateTimeInput label="Date Joined" source="date_joined" />
         </SimpleForm>
     </Edit>
 );

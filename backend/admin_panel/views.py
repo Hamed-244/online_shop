@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import permissions, viewsets
+from rest_framework.response import Response
 from django.http import JsonResponse
-from admin_panel.serializers import (UserSerializer,UserListSerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer,
+from admin_panel.serializers import (UserSerializer,UserListSerializer,UserModifySerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer,
     OrderSerializer ,OrderItemSerializer ,PaymentSerializer,FeedbackSerializer,NoticeSerializer)
 from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
 from rest_framework import filters
@@ -21,8 +22,8 @@ class UsersCrudViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return UserListSerializer
-        elif self.action == "update":
-            return UserUpdateSerializer
+        elif self.action in ["update" , "partial_update" , "create"] :
+            return UserModifySerializer
         return UserSerializer
     
     # permission_classes = [permissions.IsAdminUser]

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
-
+from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
@@ -16,10 +16,19 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id" , "username" ,"email", "first_name" , "last_name" , "email" , "is_staff", "is_active")
 
-class UserUpdateSerializer(serializers.ModelSerializer):
+class UserModifySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ("id" , "date_joined" , "groups" , "user_permissions")
+        fields = "__all__"
+    
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super(UserModifySerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super(UserModifySerializer, self).update(instance, validated_data)
 
 
 class CategorySerializer(serializers.ModelSerializer):
