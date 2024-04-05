@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 import environ
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,12 +46,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # 3rd party apps
+    'django.contrib.sites', 
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'rest_framework.authtoken',
     
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
     # own apps
     'admin_panel',
+    'authentication'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'configs.urls'
@@ -118,6 +130,54 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# For custom user model
+AUTH_USER_MODEL = 'authentication.User'
+
+# JWT settings
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta( days=7 ),
+    "REFRESH_TOKEN_LIFETIME": timedelta( days=30 ),
+    "UPDATE_LAST_LOGIN": True,
+    'TOKEN_VERIFY_SERIALIZER' : 'authentication.serializers.TokenVerifySerializer' , 
+}
+
+
+# For enabling DJ REST AUTH
+REST_AUTH = {
+    'REGISTER_SERIALIZER' : 'authentication.serializers.CustomRegisterSerializer',
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.UserSerializer',
+
+    'OLD_PASSWORD_FIELD_ENABLED': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
+    'SESSION_LOGIN': True,
+    'USE_JWT': True,
+
+    'JWT_AUTH_COOKIE': "access",
+    'JWT_AUTH_REFRESH_COOKIE': "refresh",
+}
+
+# ALL AUTH SETTINGS
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_UNIQUE_EMAIL = True
+
+# Rest framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

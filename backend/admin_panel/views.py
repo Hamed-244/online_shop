@@ -17,7 +17,7 @@ class UsersCrudViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
     search_fields = ['username' , 'first_name' , 'last_name', 'email']
     ordering_fields = '__all__'
-    filterset_fields = '__all__'
+    filterset_fields = ['username' , 'first_name' , 'last_name', 'email', 'is_staff', 'is_active', 'is_superuser']
     
     def get_serializer_class(self):
         if self.action == "list":
