@@ -33,7 +33,7 @@ DEBUG = env.bool('DEBUG')
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS")
-
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
 # Application definition
 
@@ -159,7 +159,7 @@ REST_AUTH = {
 
     'OLD_PASSWORD_FIELD_ENABLED': True,
     'LOGOUT_ON_PASSWORD_CHANGE': True,
-    'SESSION_LOGIN': True,
+    'SESSION_LOGIN': False,
     'USE_JWT': True,
 
     'JWT_AUTH_COOKIE': "access",
@@ -176,7 +176,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'admin_panel.pagination.AdminPanelPagination',
+    'PAGE_SIZE': 10
 }
 
 # Internationalization
@@ -191,12 +193,6 @@ USE_I18N = True
 USE_TZ = True
 
 APPEND_SLASH = False
-# DRF settings
-
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'admin_panel.pagination.AdminPanelPagination',
-    'PAGE_SIZE': 10
-}
 
 
 # Static files (CSS, JavaScript, Images)

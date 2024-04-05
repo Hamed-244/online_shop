@@ -5,7 +5,7 @@ import {
   EditGuesser,
   ShowGuesser,
 } from "react-admin";
-import { restDataProvider } from "./restFrameworkDataProvider";
+import { restDataProvider } from "./dataProvider";
 import { authProvider } from "./authProvider";
 import {UserList, UserShow, UserEdit , UserCreate} from "./resources/users";
 import {CategoryList, CategoryShow, CategoryEdit, CategoryCreate} from "./resources/categories";
