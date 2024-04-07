@@ -1,5 +1,5 @@
 import { List, Datagrid, TextField, EmailField, BooleanField, NumberField, SearchInput} from "react-admin";
-import { Show, SimpleShowLayout, DateField,} from 'react-admin';
+import { Show, SimpleShowLayout, DateField,ImageField,ImageInput} from 'react-admin';
 import { Edit, SimpleForm, TextInput, PasswordInput,DateTimeInput, required, NumberInput, BooleanInput, ArrayInput, SimpleFormIterator } from 'react-admin';
 import { Create , Filter} from 'react-admin';
 
@@ -18,6 +18,7 @@ export const UserList = () => (
         <Datagrid rowClick="show">
             <NumberField source="id" />
             <TextField source="username" />
+            <ImageField source="profile_image"  sx={{ '& img': { maxWidth: 40, maxHeight: 40, objectFit: 'contain' } }}/>
             <TextField source="first_name" />
             <TextField source="last_name" />
             <EmailField source="email" />
@@ -31,6 +32,7 @@ export const UserList = () => (
 export const UserShow = () => (
     <Show>
         <SimpleShowLayout>
+            <ImageField source="profile_image"  sx={{ '& img': { maxWidth: 85, maxHeight: 85, objectFit: 'contain' } }}/>
             <TextField source="id" />
             <TextField source="username" />
             <TextField source="first_name" />
