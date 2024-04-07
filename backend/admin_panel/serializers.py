@@ -19,7 +19,7 @@ class UserListSerializer(serializers.ModelSerializer):
 class UserModifySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        exclude=["profile_image",]
     
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
