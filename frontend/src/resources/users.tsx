@@ -55,7 +55,7 @@ export const UserEdit = () => (
             <TextInput label="Username" source="username" validate={required()} />
             <TextInput label="First Name" source="first_name" validate={required()} />
             <TextInput label="Last Name" source="last_name" validate={required()} />
-            <TextInput label="Email" source="email" type="email" />
+            <TextInput label="Email" source="email" type="email" validate={required()} />
             <BooleanInput label="Superuser" source="is_superuser" />
             <BooleanInput label="Staff" source="is_staff" />
             <BooleanInput label="Active" source="is_active" />

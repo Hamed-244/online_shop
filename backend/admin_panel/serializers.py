@@ -2,6 +2,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
 from django.contrib.auth.hashers import make_password
+from allauth.account.models import EmailAddress
+from django.utils.translation import gettext_lazy as _
+
 
 User = get_user_model()
 
@@ -23,12 +26,34 @@ class UserModifySerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
-        return super(UserModifySerializer, self).create(validated_data)
+        user = super(UserModifySerializer, self).create(validated_data)
+        EmailAddress.objects.create(user=user, email=user.email, primary=True, verified=True)
+        return user
 
     def update(self, instance, validated_data):
         if 'password' in validated_data:
             validated_data['password'] = make_password(validated_data['password'])
-        return super(UserModifySerializer, self).update(instance, validated_data)
+        user = super(UserModifySerializer, self).update(instance, validated_data)
+        email = user.email
+        
+        if email and EmailAddress.objects.filter(user=user).exists() :
+            email_address = EmailAddress.objects.get(user=user)
+            email_address.email = user.email
+            email_address.save()
+        elif email and not EmailAddress.objects.filter(user=user).exists():
+            EmailAddress.objects.create(user=user, email=user.email, primary=True, verified=True)
+            
+        return user
+
+    def validate_email(self, email):
+        if self.instance:
+            if self.instance.email == email:
+                return email
+        if email and EmailAddress.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                _('A user is already registered with this e-mail address.'),
+            )
+        return email
 
 
 class CategorySerializer(serializers.ModelSerializer):
