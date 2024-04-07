@@ -15,6 +15,6 @@ class User(AbstractUser):
             'unique': _("A user with that username already exists."),
         },
     )
-    email = models.EmailField(_("email address"), blank=True, unique=True)
-    profile_image = models.ImageField(_('profile image'), upload_to='media/user_profile/', null=True, blank=True, validators=[profile_picture_validator])
+    email = models.EmailField(_("email address"), blank=True)
+    profile_image = models.ImageField(_('profile image'), upload_to='user_profile/', default="defaults/user.png", validators=[profile_picture_validator])
     phone_number = models.CharField(_('phone number'), max_length=15, blank=True, null=True,validators=[phonenumber_validator])

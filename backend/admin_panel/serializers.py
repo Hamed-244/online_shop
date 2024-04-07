@@ -1,14 +1,34 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
-
+from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
+# User Model Serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = "__all__"
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id" , "username" ,"email", "first_name" , "last_name" , "profile_image" , "is_staff", "is_active")
+
+class UserModifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude=["profile_image",]
+    
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super(UserModifySerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super(UserModifySerializer, self).update(instance, validated_data)
 
 
 class CategorySerializer(serializers.ModelSerializer):

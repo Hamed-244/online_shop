@@ -1,5 +1,4 @@
-import simpleRestProvider from "ra-data-simple-rest";
+import drfProvider, { jwtTokenAuthProvider, fetchJsonWithAuthJWTToken } from 'ra-data-django-rest-framework';
 
-export const dataProvider = simpleRestProvider(
-  import.meta.env.VITE_SIMPLE_REST_URL
-);
+
+export const restDataProvider = drfProvider(import.meta.env.VITE_SIMPLE_REST_URL , fetchJsonWithAuthJWTToken);

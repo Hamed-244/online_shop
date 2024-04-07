@@ -25,7 +25,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         required=allauth_account_settings.USERNAME_REQUIRED,
         validators=[username_validator]
     )
-    email = serializers.EmailField(required=allauth_account_settings.EMAIL_REQUIRED, validators=[UniqueValidator(queryset=get_user_model().objects.all())])
+
     phone_number = serializers.CharField(max_length=15, required=False,validators=[phonenumber_validator])
     last_name = serializers.CharField(max_length=50, required=False)
     first_name = serializers.CharField(max_length=50, required=False)
@@ -54,6 +54,10 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.phone_number = self.cleaned_data.get('phone_number')
         user.profile_image = self.cleaned_data.get('profile_image')
         user.save()
+        
+        # save its email address
+        user_email_address = EmailAddress(user=user,email=user.email, verified=True,primary=True)
+        user_email_address.save()
         return user
 
 
