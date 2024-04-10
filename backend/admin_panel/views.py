@@ -46,6 +46,12 @@ class ProductCrudViewSet(viewsets.ModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['name' , 'description' , 'slug']
+    ordering_fields = '__all__'
+    filterset_fields = '__all__'
+    
     permission_classes = [permissions.IsAdminUser]
 
 

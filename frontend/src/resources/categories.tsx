@@ -2,7 +2,6 @@ import { List, Datagrid, TextField, EmailField, BooleanField, NumberField, RichT
 import { Show, SimpleShowLayout, DateField} from 'react-admin';
 import { Edit, SimpleForm, TextInput, PasswordInput, DateInput,DateTimeInput, required, NumberInput, BooleanInput, ArrayInput, SimpleFormIterator } from 'react-admin';
 import { Create , Filter, SearchInput,SelectInput, ReferenceInput,ReferenceField} from 'react-admin';
-import { RichTextInput } from 'ra-input-rich-text';
 
 const CategoryFilter = [
     <SearchInput source="q" alwaysOn />,
