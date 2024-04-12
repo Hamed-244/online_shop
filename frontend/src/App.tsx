@@ -13,6 +13,7 @@ import {ProductsList, ProductShow, ProductEdit,ProductCreate} from "./resources/
 import { ProductImageList ,ProductImageShow, ProductImageEdit, ProductImageCreate} from "./resources/productImages";
 import { ShippingAddressesList,ShippingAddressShow ,ShippingAddressEdit,ShippingAddressCreate} from "./resources/shippingAddresses";
 import { OrdersList,OrderCreate,OrderEdit,OrderShow } from "./resources/orders";
+import { OrderItemsList,OrderItemCreate,OrderItemEdit,OrderItemShow } from "./resources/orderItems";
 
 export const App = () => (
   <Admin dataProvider={dataProvider} authProvider={authProvider}>
@@ -21,6 +22,7 @@ export const App = () => (
     <Resource name="products" list={ProductsList} edit={ProductEdit} create={ProductCreate} show={ProductShow} recordRepresentation="name"/>
     <Resource name="product-images" list={ProductImageList} edit={ProductImageEdit} create={ProductImageCreate} show={ProductImageShow} />
     <Resource name="shipping-addresses" list={ShippingAddressesList} create={ShippingAddressCreate} edit={ShippingAddressEdit} show={ShippingAddressShow} recordRepresentation="title"/>
-    <Resource name="orders" list={OrdersList} create={OrderCreate} edit={OrderEdit} show={OrderShow} />
+    <Resource name="orders" list={OrdersList} create={OrderCreate} edit={OrderEdit} show={OrderShow} recordRepresentation="id"/>
+    <Resource name="order-items" list={OrderItemsList} create={OrderItemCreate} edit={OrderItemEdit} show={OrderItemShow} />
   </Admin>
 );

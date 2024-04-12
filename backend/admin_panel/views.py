@@ -96,6 +96,11 @@ class OrderCrudViewSet(viewsets.ModelViewSet):
 class OrderItemCrudViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = "__all__"
+    ordering_fields = '__all__'
+    filterset_fields = ['order', 'product', 'quantity']
+    
     permission_classes = [permissions.IsAdminUser]
 
 
