@@ -84,6 +84,12 @@ class ShippingAddressCrudViewSet(viewsets.ModelViewSet):
 class OrderCrudViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['id','user__first_name' , 'user__last_name', 'user__username', 'shipping_address__city', 'shipping_address__state']
+    ordering_fields = '__all__'
+    filterset_fields = ['user', 'shipping_address', 'status']
+    
     permission_classes = [permissions.IsAdminUser]
 
 
