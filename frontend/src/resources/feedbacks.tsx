@@ -6,7 +6,7 @@ import { Create , Filter, SearchInput,SelectInput, ReferenceInput,ReferenceField
 const FeedbackFilter = [
     <SearchInput source="q" alwaysOn />,
     <ReferenceInput source="order" reference="orders" label="Filter by Order" />,
-    <NumberInput source="rating" label="Filter by rating" />
+    <NumberInput source="rating" label="Filter by rating" />,
 ];
 
 export const FeedbackList = () => (

@@ -5,8 +5,7 @@ import { Create , Filter} from 'react-admin';
 
 const ProductImageFilter = [
     <SearchInput source="q" alwaysOn />,
-    <NumberInput label="Filter by Product" source="product" />,
-
+    <ReferenceInput label="Filter by Product" source="product" reference="products"/>
 ];
 
 export const ProductImageList = () => (

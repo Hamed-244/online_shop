@@ -5,6 +5,7 @@ import { Create , Filter, SearchInput,SelectInput, ReferenceInput,ReferenceField
 
 const PaymentsFilter = [
     <SearchInput source="q" alwaysOn />,
+    <ReferenceInput source="order" reference="orders" label="Filter by Order"/>,
     <SelectInput source="status" label="Filter by Status" choices={[
         { id: 'done', name: 'Done' },
         { id: 'failed', name: 'Failed' },
@@ -14,8 +15,6 @@ const PaymentsFilter = [
         { id: 'paypal', name: 'PayPal' },
         { id: 'zarinpal', name: 'ZarinPal' },
     ]} />,
-    <DateInput source="payment_date" label="Filter by payment date" />,
-    <DateInput source="updated_at" label="Filter by updated time" />
 ];
 
 export const PaymentsList = () => (

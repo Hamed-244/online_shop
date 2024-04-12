@@ -6,9 +6,7 @@ import { Create , Filter, SearchInput,SelectInput, ReferenceInput,ReferenceField
 const CategoryFilter = [
     <SearchInput source="q" alwaysOn />,
     <TextInput label="Filter by Name" source="name" />,
-    <DateInput label="Filter by Created time" source="created_at" />,
-    <DateInput label="Filter by Updated time" source="updated_at" />,
-    <NumberInput label="Filter by Parent Category" source="parent_category" />,
+    <ReferenceInput source="parent_category" reference="categories" label="Filter by Parent Category" />,
 ];
 
 
@@ -49,10 +47,7 @@ export const CategoryEdit = () => (
         <SimpleForm>
             <NumberInput disabled label="Id" source="id" />
             <TextInput label="Name" source="name" />
-            <RichTextField aria-multiline source="description" />
-            <ReferenceInput label="Parent Category" source="parent_category" reference="categories">
-                <SelectInput optionText="name" />
-            </ReferenceInput>
+            <ReferenceInput label="Parent Category" source="parent_category" reference="categories"/>
             <DateTimeInput label="Updated at" source="updated_at" />
             <DateTimeInput label="Create at" source="created_at" />
         </SimpleForm>

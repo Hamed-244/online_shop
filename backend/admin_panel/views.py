@@ -86,7 +86,7 @@ class OrderCrudViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
-    search_fields = ['id','user__first_name' , 'user__last_name', 'user__username', 'shipping_address__city', 'shipping_address__state']
+    search_fields = ['user__first_name' , 'user__last_name', 'user__username', 'shipping_address__city', 'shipping_address__state','shipping_address__title']
     ordering_fields = '__all__'
     filterset_fields = ['user', 'shipping_address', 'status']
     
@@ -97,7 +97,7 @@ class OrderItemCrudViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
-    search_fields = "__all__"
+    search_fields = ['order__user__username','product__slug', 'product__name', 'quantity']
     ordering_fields = '__all__'
     filterset_fields = ['order', 'product', 'quantity']
     
@@ -109,9 +109,9 @@ class PaymentCrudViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
-    search_fields = "__all__"
+    search_fields = ['order__id','status', 'payment_method',]
     ordering_fields = '__all__'
-    filterset_fields = ['status', 'payment_method','payment_date','updated_at']
+    filterset_fields = ['order','status', 'payment_method','payment_date','updated_at']
     
     permission_classes = [permissions.IsAdminUser]
 
@@ -121,7 +121,7 @@ class FeedbackCrudViewSet(viewsets.ModelViewSet):
     serializer_class = FeedbackSerializer
     
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
-    search_fields = ['comment',]
+    search_fields = ['id','comment',]
     ordering_fields = '__all__'
     filterset_fields = ['order', 'rating','feedback_date','updated_at']
     
