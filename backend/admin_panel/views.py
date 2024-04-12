@@ -119,6 +119,12 @@ class PaymentCrudViewSet(viewsets.ModelViewSet):
 class FeedbackCrudViewSet(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
+    
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['comment',]
+    ordering_fields = '__all__'
+    filterset_fields = ['order', 'rating','feedback_date','updated_at']
+    
     permission_classes = [permissions.IsAdminUser]
 
 

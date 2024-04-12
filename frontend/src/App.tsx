@@ -15,6 +15,7 @@ import { ShippingAddressesList,ShippingAddressShow ,ShippingAddressEdit,Shipping
 import { OrdersList,OrderCreate,OrderEdit,OrderShow } from "./resources/orders";
 import { OrderItemsList,OrderItemCreate,OrderItemEdit,OrderItemShow } from "./resources/orderItems";
 import { PaymentsList, PaymentShow,PaymentEdit,PaymentCreate } from "./resources/payments";
+import { FeedbackList,FeedbackShow,FeedbackEdit,FeedbackCreate } from "./resources/feedbacks";
 
 export const App = () => (
   <Admin dataProvider={dataProvider} authProvider={authProvider}>
@@ -26,5 +27,6 @@ export const App = () => (
     <Resource name="orders" list={OrdersList} create={OrderCreate} edit={OrderEdit} show={OrderShow} recordRepresentation="id"/>
     <Resource name="order-items" list={OrderItemsList} create={OrderItemCreate} edit={OrderItemEdit} show={OrderItemShow} />
     <Resource name="payments" list={PaymentsList} create={PaymentCreate} edit={PaymentEdit} show={PaymentShow} />
+    <Resource name="feedbacks" list={FeedbackList} create={FeedbackCreate} edit={FeedbackEdit} show={FeedbackShow} />
   </Admin>
 );
