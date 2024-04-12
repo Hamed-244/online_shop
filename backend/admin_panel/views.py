@@ -107,6 +107,12 @@ class OrderItemCrudViewSet(viewsets.ModelViewSet):
 class PaymentCrudViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = "__all__"
+    ordering_fields = '__all__'
+    filterset_fields = ['status', 'payment_method','payment_date','updated_at']
+    
     permission_classes = [permissions.IsAdminUser]
 
 
