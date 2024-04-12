@@ -9,7 +9,7 @@ import {
 const baseDataProvider = drfProvider(import.meta.env.VITE_SIMPLE_REST_URL , fetchJsonWithAuthJWTToken);
 const endpoint = import.meta.env.VITE_SIMPLE_REST_URL;
 
-type PostParams = {
+type ProductImagesParams = {
   id: string;
   product: string;
   image: {
@@ -20,7 +20,7 @@ type PostParams = {
 };
 
 const createProductImageFormData = (
-  params: CreateParams<PostParams> | UpdateParams<PostParams>
+  params: CreateParams<ProductImagesParams> | UpdateParams<ProductImagesParams>
 ) => {
   const formData = new FormData();
   params.data.image?.rawFile && formData.append("image", params.data.image.rawFile);
