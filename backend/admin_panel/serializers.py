@@ -22,7 +22,7 @@ class UserListSerializer(serializers.ModelSerializer):
 class UserModifySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude=["profile_image",]
+        fields="__all__"
     
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
@@ -31,7 +31,7 @@ class UserModifySerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        if 'password' in validated_data:
+        if 'password' in validated_data and validated_data['password'] != instance.password:
             validated_data['password'] = make_password(validated_data['password'])
         user = super(UserModifySerializer, self).update(instance, validated_data)
         email = user.email
