@@ -131,4 +131,10 @@ class FeedbackCrudViewSet(viewsets.ModelViewSet):
 class NoticeCrudViewSet(viewsets.ModelViewSet):
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
+    
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['title','message',]
+    ordering_fields = '__all__'
+    filterset_fields = ['user' ,'type']
+    
     permission_classes = [permissions.IsAdminUser]
