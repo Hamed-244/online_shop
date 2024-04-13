@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
+from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice,AdminLog)
 from django.contrib.auth.hashers import make_password
 from allauth.account.models import EmailAddress
 from django.utils.translation import gettext_lazy as _
@@ -118,4 +118,11 @@ class NoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notice
+        fields = "__all__"
+
+
+class AdminLogSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AdminLog
         fields = "__all__"

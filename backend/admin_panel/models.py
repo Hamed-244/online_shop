@@ -148,3 +148,14 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class AdminLog(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    ip_address = models.CharField(max_length=100, null=True, blank=True)
+    action = models.CharField(max_length=100)
+    details = models.TextField()
+
+    def __str__(self):
+        return f"{self.timestamp} - {self.action}"

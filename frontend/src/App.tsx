@@ -1,6 +1,8 @@
 import {
   Admin,
   Resource,
+  ListGuesser,
+  ShowGuesser
 } from "react-admin";
 import dashboard from "./dashboard";
 import {LightTheme,DarkTheme } from './themes/themes';
@@ -16,6 +18,7 @@ import { OrderItemsList,OrderItemCreate,OrderItemEdit,OrderItemShow } from "./re
 import { PaymentsList, PaymentShow,PaymentEdit,PaymentCreate } from "./resources/payments";
 import { FeedbackList,FeedbackShow,FeedbackEdit,FeedbackCreate } from "./resources/feedbacks";
 import { NoticeList,NoticeShow,NoticeEdit,NoticeCreate } from "./resources/notices";
+import { LogsList,LogShow } from "./resources/logs";
 
 export const App = () => (
 
@@ -30,5 +33,6 @@ export const App = () => (
     <Resource name="payments" list={PaymentsList} create={PaymentCreate} edit={PaymentEdit} show={PaymentShow} />
     <Resource name="feedbacks" list={FeedbackList} create={FeedbackCreate} edit={FeedbackEdit} show={FeedbackShow} />
     <Resource name="notices" list={NoticeList} create={NoticeCreate} edit={NoticeEdit} show={NoticeShow} />
+    <Resource name="logs" list={LogsList} show={LogShow} />
   </Admin>
 );

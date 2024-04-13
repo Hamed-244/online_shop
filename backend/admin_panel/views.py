@@ -3,15 +3,31 @@ from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 from django.http import JsonResponse
 from admin_panel.serializers import (UserSerializer,UserListSerializer,UserModifySerializer, ProductSerializer, CategorySerializer ,ProductImagesSerializer ,ShippingAddressSerializer,
-    OrderSerializer ,OrderItemSerializer ,PaymentSerializer,FeedbackSerializer,NoticeSerializer)
-from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
+    OrderSerializer ,OrderItemSerializer ,PaymentSerializer,FeedbackSerializer,NoticeSerializer,AdminLogSerializer)
+from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback,Notice,AdminLog)
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from datetime import date , timedelta , datetime
 from collections import OrderedDict
+from functools import wraps
 
 User = get_user_model()
+
+def log_action(action, model):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            instance = func(self, *args, **kwargs)
+            if action == "delete":
+                details = f"delete {model.__name__.lower()}: {instance}"
+            else:
+                details = f"{action} {model.__name__.lower()}: {instance}"
+            AdminLog.objects.create(user=self.request.user, ip_address=self.request.META.get('REMOTE_ADDR', None), action=action, details=details)
+            return instance
+        return wrapper
+    return decorator
+
 
 class UsersCrudViewSet(viewsets.ModelViewSet):
 
@@ -30,6 +46,17 @@ class UsersCrudViewSet(viewsets.ModelViewSet):
         return UserSerializer
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", User)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", User)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", User)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class CategoryCrudViewSet(viewsets.ModelViewSet):
@@ -43,6 +70,17 @@ class CategoryCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = '__all__'
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", Category)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", Category)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", Category)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class ProductCrudViewSet(viewsets.ModelViewSet):
@@ -56,6 +94,17 @@ class ProductCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = '__all__'
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", Product)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", Product)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", Product)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class ProductImagesCrudViewSet(viewsets.ModelViewSet):
@@ -69,6 +118,17 @@ class ProductImagesCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['id', 'product', 'created_at']
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", ProductImage)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", ProductImage)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", ProductImage)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class ShippingAddressCrudViewSet(viewsets.ModelViewSet):
@@ -82,7 +142,18 @@ class ShippingAddressCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user' ,'city' ,'state' ,'postal_code']
     
     permission_classes = [permissions.IsAdminUser]
-    
+    @log_action("create", ShippingAddress)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", ShippingAddress)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", ShippingAddress)
+    def perform_destroy(self, instance):
+        instance.delete()
+
 
 class OrderCrudViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -94,6 +165,17 @@ class OrderCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user', 'shipping_address', 'status']
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", Order)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", Order)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", Order)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class OrderItemCrudViewSet(viewsets.ModelViewSet):
@@ -105,6 +187,17 @@ class OrderItemCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['order', 'product', 'quantity']
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", OrderItem)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", OrderItem)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", OrderItem)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class PaymentCrudViewSet(viewsets.ModelViewSet):
@@ -117,6 +210,17 @@ class PaymentCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['order','status', 'payment_method','payment_date','updated_at']
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", Payment)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", Payment)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", Payment)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class FeedbackCrudViewSet(viewsets.ModelViewSet):
@@ -129,6 +233,17 @@ class FeedbackCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['order', 'rating','feedback_date','updated_at']
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", Feedback)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", Feedback)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", Feedback)
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class NoticeCrudViewSet(viewsets.ModelViewSet):
@@ -141,7 +256,30 @@ class NoticeCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user' ,'type']
     
     permission_classes = [permissions.IsAdminUser]
+    @log_action("create", Notice)
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    @log_action("update", Notice)
+    def perform_update(self, serializer):
+        return serializer.save()
+
+    @log_action("delete", Notice)
+    def perform_destroy(self, instance):
+        instance.delete()
+
+
+class AdminLogViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = AdminLog.objects.all()
+    serializer_class = AdminLogSerializer
     
+    filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
+    search_fields = ['ip_address' ,'action','details']
+    ordering_fields = '__all__'
+    filterset_fields = ['user__username','ip_address' ,'action']
+    
+    permission_classes = [permissions.IsAdminUser]
+
 
 def get_payment_data():
     tomorrow = date.today() + timedelta(1)
