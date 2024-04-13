@@ -2,6 +2,7 @@ import {
   Admin,
   Resource,
 } from "react-admin";
+import dashboard from "./dashboard";
 import {LightTheme,DarkTheme } from './themes/themes';
 import { dataProvider } from "./dataProvider";
 import { authProvider } from "./authProvider";
@@ -18,7 +19,7 @@ import { NoticeList,NoticeShow,NoticeEdit,NoticeCreate } from "./resources/notic
 
 export const App = () => (
 
-  <Admin dataProvider={dataProvider} authProvider={authProvider} theme={LightTheme} defaultTheme="dark" darkTheme={DarkTheme }>
+  <Admin dashboard={dashboard} title="Admin Panel" dataProvider={dataProvider} authProvider={authProvider} theme={LightTheme} defaultTheme="dark" darkTheme={DarkTheme }>
     <Resource name="users" list={UserList} edit={UserEdit} create={UserCreate} show={UserShow} recordRepresentation="username"/>
     <Resource name="categories" list={CategoryList} edit={CategoryEdit} create={CategoryCreate} show={CategoryShow} recordRepresentation="name"/>
     <Resource name="products" list={ProductsList} edit={ProductEdit} create={ProductCreate} show={ProductShow} recordRepresentation="name"/>

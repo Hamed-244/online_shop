@@ -7,11 +7,6 @@ import {
 } from '@mui/material';
 import { RaThemeOptions } from './types';
 
-/**
- * House: A young and joyful theme.
- *
- * Uses rounded corners, blurry backdrop, large padding, and a bright color palette.
- */
 
 const componentsOverrides = (theme: Theme) => ({
     MuiBackdrop: {
@@ -160,7 +155,7 @@ const alert = {
 const darkPalette: PaletteOptions = {
     primary: { main: '#1da6f7', light: '#7ab1df' },
     secondary: { main: '#0282f9' },
-    background: { default: '#363D40', paper: '#2B3033' },
+    background: { default: '#1c2125', paper: '#262d33' },
     ...alert,
     mode: 'dark' as 'dark',
 };

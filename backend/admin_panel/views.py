@@ -7,6 +7,9 @@ from admin_panel.serializers import (UserSerializer,UserListSerializer,UserModif
 from admin_panel.models import (Product, Category, ProductImage, ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.views import APIView
+from datetime import date , timedelta , datetime
+from collections import OrderedDict
 
 User = get_user_model()
 
@@ -138,3 +141,89 @@ class NoticeCrudViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user' ,'type']
     
     permission_classes = [permissions.IsAdminUser]
+    
+
+def get_payment_data():
+    tomorrow = date.today() + timedelta(1)
+    this_week = tomorrow - timedelta(7)
+
+    payments = Payment.objects.filter(payment_date__range=[this_week , tomorrow])
+
+    payment_date = {}
+
+    today = datetime.today()
+    for i in range(7):
+        this_day = today - timedelta(i)
+        date_str = this_day.strftime('%m-%d')
+        payment_date[date_str] = 0
+    for obj in payments:
+        created_time = obj.payment_date
+        date_str = created_time.strftime('%m-%d')
+        payment_date[date_str] += 1
+    reversed_dict = OrderedDict(reversed(list(payment_date.items())))
+    return reversed_dict
+
+def get_weekly_payments():
+    tomorrow = date.today() + timedelta(1)
+    this_week = tomorrow - timedelta(7)
+
+    payments = Payment.objects.filter(payment_date__range=[this_week , tomorrow])
+    return payments.count()
+
+def get_total_revenue():
+    tomorrow = date.today() + timedelta(1)
+    this_week = tomorrow - timedelta(7)
+
+    payments = Payment.objects.filter(payment_date__range=[this_week , tomorrow])
+    total = 0
+    for item in payments:
+        total += item.amount
+    return total
+
+def get_weekly_sales():
+    tomorrow = date.today() + timedelta(1)
+    this_week = tomorrow - timedelta(7)
+
+    payments = Payment.objects.filter(payment_date__range=[this_week , tomorrow])
+    total = 0
+    for item in payments:
+        for item in item.order.items.all():
+            total+=item.quantity
+    return total
+
+def get_popular_products():
+    payments = Payment.objects.filter()
+    products = {}
+    for item in payments:
+        for item in item.order.items.all():
+            if products.get(item.product.name , None):
+                products[item.product.name] += item.quantity
+            else:
+                products[item.product.name] = item.quantity
+
+    sorted_products = sorted(products.items(), key=lambda x: x[1], reverse=True)
+    top_products = sorted_products[:7]
+    popular_products = dict(top_products)
+
+    return popular_products
+
+
+class DashboardInfoApi(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+        
+        payment_date = get_payment_data()
+        weekly_payments = get_weekly_payments()
+        total_revenue = get_total_revenue()
+        weekly_sales = get_weekly_sales()
+        popular_products = get_popular_products()
+        data = {
+            "payment": payment_date,
+            "weekly-sales": weekly_sales,
+            "weekly-payments": weekly_payments,
+            "total-revenue": total_revenue,
+            "popular": popular_products
+        }
+
+        return Response(data)

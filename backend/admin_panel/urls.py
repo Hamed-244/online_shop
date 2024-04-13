@@ -16,7 +16,7 @@ router.register(r'feedbacks', views.FeedbackCrudViewSet)
 router.register(r'notices', views.NoticeCrudViewSet)
 
 urlpatterns = [
-
+    path('dashboard-info', views.DashboardInfoApi.as_view())
 ]
 
 # add viewsets urls to urlpatterns
