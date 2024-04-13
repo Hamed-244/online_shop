@@ -1,10 +1,8 @@
 import {
   Admin,
   Resource,
-  ListGuesser,
-  EditGuesser,
-  ShowGuesser,
 } from "react-admin";
+import {LightTheme,DarkTheme } from './themes/themes';
 import { dataProvider } from "./dataProvider";
 import { authProvider } from "./authProvider";
 import {UserList, UserShow, UserEdit , UserCreate} from "./resources/users";
@@ -19,7 +17,8 @@ import { FeedbackList,FeedbackShow,FeedbackEdit,FeedbackCreate } from "./resourc
 import { NoticeList,NoticeShow,NoticeEdit,NoticeCreate } from "./resources/notices";
 
 export const App = () => (
-  <Admin dataProvider={dataProvider} authProvider={authProvider}>
+
+  <Admin dataProvider={dataProvider} authProvider={authProvider} theme={LightTheme} defaultTheme="dark" darkTheme={DarkTheme }>
     <Resource name="users" list={UserList} edit={UserEdit} create={UserCreate} show={UserShow} recordRepresentation="username"/>
     <Resource name="categories" list={CategoryList} edit={CategoryEdit} create={CategoryCreate} show={CategoryShow} recordRepresentation="name"/>
     <Resource name="products" list={ProductsList} edit={ProductEdit} create={ProductCreate} show={ProductShow} recordRepresentation="name"/>
