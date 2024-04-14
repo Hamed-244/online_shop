@@ -1,0 +1,21 @@
+name: Deploy Project Backend(test)
+
+on:
+  push:
+    branches:
+      - test-deploy
+
+jobs:
+  deploy_backend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Deploy Backend
+      env:
+        LIARA_TOKEN: ${{secrets.LIARA_API_TOKEN}}
+      run: |
+        cd backend
+        # Add commands to deploy backend here
+        npm i -g @liara/cli@5
+        liara deploy --app="electro" --api-token="$LIARA_TOKEN" --no-app-logs --port=80 --build-location="germany"
