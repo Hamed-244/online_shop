@@ -92,65 +92,6 @@
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
 
-<!-- Cart -->
-<div class="dropdown">
-	<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-		<i class="fa fa-shopping-cart"></i>
-		<span>Your Cart</span>
-		<div class="qty">{{ count_product_in_order_item }}</div>
-	</a>
-	<div class="cart-dropdown">
-		<div class="cart-list">
-			{% for order_item in order_items %}
-			<div class="product-widget">
-				<div class="product-img">
-					<img src="{{ order_item.product.image.url}}" alt="">
-				</div>
-				<div class="product-body">
-					<h3 class="product-name"><a href="store/product/{{ order_item.product.slug}}/">{{ order_item.product.name }}</a></h3>
-					<h4 class="product-price"><span class="qty">1x</span>${{ order_item.product.price }}</h4>
-				</div>
-				{% csrf_token %}
-				<button class="delete" data-order-item-id="{{ order_item.id }}"><i class="fa fa-close"></i></button>
-			</div>
-			{% empty %}
-				<h4>Do you have a problem?</h4>
-				<h4>Do you have a problem?</h4>
-				<h4>You don't know what happened to us¯\_(ツ)_/¯</h4>
-			{% endfor %}
-		</div>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-$(".delete").click(function(){
-var orderItemId = $(this).data('order-item-id');
-$.ajax({
-url: '/remove_from_cart/',  // URL of your view that will handle the request
-data: {
-'order_item_id': orderItemId,
-'csrfmiddlewaretoken': '{{ csrf_token }}'
-},
-type: 'POST',
-dataType: 'json',
-success: function(data) {
-if (data.success) {
-alert("Product removed from cart.");
-}
-}
-});
-});
-});
-</script>
-		<div class="cart-summary">
-			<small>3 Item(s) selected</small>
-			<h5>Total price: ${{ total_price }}</h5>
-		</div>
-		<div class="cart-btns">
-			<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-		</div>
-	</div>
-</div>
-<!-- /Cart -->
 
 								<!-- Menu Toogle -->
 								<div class="menu-toggle">
@@ -181,7 +122,7 @@ alert("Product removed from cart.");
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
 						<li><a href="/">Home</a></li>
-						<li class="active"><a href="">Store</a></li>
+						<li class="active"><a href="">Show order</a></li>
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -200,7 +141,7 @@ alert("Product removed from cart.");
 					<div class="col-md-12">
 						<ul class="breadcrumb-tree">
 							<li><a href="/">Home</a></li>
-							<li><a href="">Store</a></li>
+							<li><a href="">Show order</a></li>
 
 						</ul>
 					</div>
@@ -217,30 +158,7 @@ alert("Product removed from cart.");
 			<div class="container">
 				<!-- row -->
 				<div class="row">
-					<!-- ASIDE -->
-					<div id="aside" class="col-md-3">
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Categories</h3>
-							<div class="checkbox-filter">
-								{% for category in categorys %}
-									
-										<div class="input-checkbox">
-											<a href="category/{{ category.name }}/">
-											<label for="category-{{ category.id }}">
-												<span></span>
-												{{ category.name }}
-												<small>({{ category_product_count|get_item:category.name }})</small>
-											</label>
-											</a>
-										</div>
-									
-								{% endfor %}
-
-							</div>
-						</div>
-					</div>
-					<!-- /ASIDE -->
+					
 
 					<!-- STORE -->
 					<div id="store" class="col-md-9">
@@ -249,35 +167,30 @@ alert("Product removed from cart.");
 <!-- store products -->
 <div class="row">
     <!-- product -->
-    {% for product in products %}
-	{% if product.amount != 0 %}
+    {% for order in orders %}
     <div class="col-md-4 col-xs-6">
         <div class="product">
-            <a href="product/{{ product.slug}}/">
-            <div class="product-img">
-                <img src="{{ product.image.url }}" alt="">
-                <div class="product-label">
-                    <span class="sale">{{ product.amount }}</span>
-                </div>
-            </div>
-            </a>
             <div class="product-body">
-                {% for category in product.category.all %}
-                        <p class="product-category">{{ category.name }}</p>
-                {% endfor %}
-                <h3 class="product-name"><a href="product/{{ product.slug}}/">{{ product.name }}</a></h3>
-                <h4 class="product-price">${{ product.price }}<del class="product-old-price">${{ product.price }}</del></h4>
+                <h3 class="product-name">{{ order.shipping_address.title }}</h3>
+                <h3 class="product-name">{{ order.shipping_address.address_line1 }}</h3>
+                <h3 class="product-name">{{ order.shipping_address.city }}</h3>
+                <h3 class="product-name">{{ order.shipping_address.state }}</h3>
+                <h3 class="product-name">{{ order.shipping_address.postal_code }}</h3>
+                <h3 class="product-name">{{ order.shipping_address.created_at }}</h3>
+                <h3 class="product-name">{{ order.status }}</h3>
+                <h3 class="product-name">{{ order.order_date }}</h3>
+                <h3 class="product-name">{{ order.created_at }}</h3>
             </div>
             <div class="add-to-cart add-to-cart-btn">
                 <button class="add-to-cart-btn" data-product-id="{{ product.id }}"><i class="fa fa-shopping-cart"></i> add to cart</button>
             </div>
         </div>
     </div>
-	{% endif %}
     {% empty %}
         <h4>Do you have a problem?</h4>
         <h4>Do you have a problem?</h4>
         <h4>You don't know what happened to us¯\_(ツ)_/¯</h4>
+		<br><br><br><br><br><br>
     {% endfor %}
     <!-- /product -->
 </div>

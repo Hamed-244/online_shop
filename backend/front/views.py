@@ -170,6 +170,6 @@ def place_order(request):
 @login_required
 def show_order(request):
     orders = Order.objects.all()
-    return render(request, 'html/checkout.html', {
+    return render(request, 'html/show_order.html', {
         'orders': orders,
     })
