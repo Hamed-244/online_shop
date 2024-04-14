@@ -61,7 +61,8 @@ INSTALLED_APPS = [
 
     # own apps
     'admin_panel',
-    'authentication'
+    'authentication',
+    'front',
 ]
 
 MIDDLEWARE = [

@@ -8,6 +8,7 @@ User = get_user_model()
 
 
 class Category(models.Model):
+    image = models.ImageField(upload_to='category_images', blank=True, null=True)
     name = models.CharField(max_length=32, unique=True)
     description = models.CharField(max_length=255)
     parent_category = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name="children")
@@ -19,6 +20,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    image = models.ImageField(upload_to='product_images', blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField(unique=True , max_length=128)
     description = models.TextField()
@@ -47,6 +49,7 @@ class ShippingAddress(models.Model):
     city = models.CharField(max_length=64)
     state = models.CharField(max_length=64)
     postal_code = models.CharField(max_length=32)
+    created_at = models.DateField(auto_created=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -63,7 +66,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL , null=True, related_name="orders")
     shipping_address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, null=True, related_name="orders")
     status = models.CharField(max_length=10, choices=status_choices , default='pending')
-    order_date = models.DateTimeField(blank=True)
+    order_date = models.DateTimeField(blank=True, auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
