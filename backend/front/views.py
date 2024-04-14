@@ -10,7 +10,8 @@ def home(request):
     categorys = Category.objects.all()
     products = Product.objects.all()[0:10]
     if request.user.is_authenticated :
-        order_items = OrderItem.objects.filter(order__user=request.user)
+        order = Order.objects.get_or_create(user=request.user, status='pending')
+        order_items = OrderItem.objects.filter(order=order[0].id)
     else :
         order_items = []
     count_product_in_order_item = order_items.count() if order_items else 0
@@ -29,7 +30,8 @@ def store(request):
     products = Product.objects.all()
     categorys = Category.objects.all()
     if request.user.is_authenticated :
-        order_items = OrderItem.objects.filter(order__user=request.user)
+        order = Order.objects.get_or_create(user=request.user, status='pending')
+        order_items = OrderItem.objects.filter(order=order[0].id)
     else :
         order_items = []
     count_product_in_order_item = order_items.count() if order_items else 0
@@ -55,7 +57,8 @@ def product_detail(request, slug):
     product_images = ProductImage.objects.filter(product=product)
     related_products = Product.objects.filter(category__in=product.category.all()).exclude(id=product.id)
     if request.user.is_authenticated :
-        order_items = OrderItem.objects.filter(order__user=request.user)
+        order = Order.objects.get_or_create(user=request.user, status='pending')
+        order_items = OrderItem.objects.filter(order=order[0].id)
     else :
         order_items = []
     count_product_in_order_item = order_items.count() if order_items else 0
@@ -78,7 +81,8 @@ def store_category(request, category_name):
     products = Product.objects.all()
     categorys = Category.objects.all()
     if request.user.is_authenticated :
-        order_items = OrderItem.objects.filter(order__user=request.user)
+        order = Order.objects.get_or_create(user=request.user, status='pending')
+        order_items = OrderItem.objects.filter(order=order[0].id)
     else :
         order_items = []
     count_product_in_order_item = order_items.count() if order_items else 0
@@ -124,7 +128,7 @@ def add_to_cart(request):
 def remove_from_cart(request):
     if request.method == 'POST':
         order_item_id = request.POST.get('order_item_id')
-        order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user)
+        order_item = get_object_or_404(OrderItem, id=order_item_id, order__user=request.user,order__status="pending")
         product = order_item.product
         product.amount +=1
         product.save()
@@ -135,8 +139,9 @@ def remove_from_cart(request):
 
 @login_required
 def checkout(request):
-    order_items = OrderItem.objects.filter(order__user=request.user)
-    order_items_che = OrderItem.objects.filter(order__user=request.user).values('product__name').annotate(total=Count('product'), price=Sum('product__price'))
+    order = Order.objects.get_or_create(user=request.user, status='pending')
+    order_items = OrderItem.objects.filter(order=order[0].id)
+    order_items_che = order_items.values('product__name').annotate(total=Count('product'), price=Sum('product__price'))
     total_price = sum(item.total_price() for item in order_items)
     return render(request, 'html/checkout.html', {
         'order_items': order_items_che,
@@ -160,15 +165,18 @@ def place_order(request):
             state=data.get('state'),
             postal_code=data.get('postal_code')
         )
-        order = Order.objects.create(
-            user=request.user,
-            shipping_address=shippingaddress,
-        )
-
+        order = Order.objects.get_or_create(user=request.user, status='pending')[0]
+        
+        if order.items.count()<1:
+            return JsonResponse({'status': 'No order to place'})
+        else :
+            order.status='completed'
+            order.save()
         payment = Payment.objects.create(
             order=order,
             amount=data.get('amount'),
-            payment_method=data.get('payment_method')
+            payment_method=data.get('payment_method'),
+            status="done"
         )
 
         feedback = Feedback.objects.create(
