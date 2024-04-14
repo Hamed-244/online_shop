@@ -16,6 +16,7 @@ jobs:
         LIARA_TOKEN: ${{secrets.LIARA_API_TOKEN}}
       run: |
         cd frontend
+        ls
         # Add commands to deploy frontend here
         npm i -g @liara/cli@5
         liara deploy --app="admin-electro" --api-token="$LIARA_TOKEN" --no-app-logs --port=5173 --build-location="germany" --platform=node --debug
