@@ -107,7 +107,7 @@
 													<img src="{{ order_item.product.image.url}}" alt="">
 												</div>
 												<div class="product-body">
-													<h3 class="product-name"><a href="store/product/{{ order_item.product.slug}}/">{{ order_item.product.name }}</a></h3>
+													<h3 class="product-name"><a href="/store/product/{{ order_item.product.slug}}/">{{ order_item.product.name }}</a></h3>
 													<h4 class="product-price"><span class="qty">1x</span>${{ order_item.product.price }}</h4>
 												</div>
 												{% csrf_token %}
@@ -262,7 +262,7 @@ $(document).ready(function(){
 										{% for category in product.category.all %}
 												<p class="product-category">{{ category.name }}</p>
 										{% endfor %}
-										<h3 class="product-name"><a href="product/{{ product.slug}}/">{{ product.name }}</a></h3>
+										<h3 class="product-name"><a href="/store/product/{{ product.slug}}/">{{ product.name }}</a></h3>
 										<h4 class="product-price">${{ product.price }}<del class="product-old-price">${{ product.price }}</del></h4>
 									</div>
 									<div class="add-to-cart add-to-cart-btn">

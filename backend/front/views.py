@@ -5,12 +5,15 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Sum
 
-@login_required
+
 def home(request):
     categorys = Category.objects.all()
     products = Product.objects.all()[0:10]
-    order_items = OrderItem.objects.filter(order__user=request.user)
-    count_product_in_order_item = order_items.count()
+    if request.user.is_authenticated :
+        order_items = OrderItem.objects.filter(order__user=request.user)
+    else :
+        order_items = []
+    count_product_in_order_item = order_items.count() if order_items else 0
     total_price = sum(item.total_price() for item in order_items)
 
     return render(request, 'html/index.html',{
@@ -21,12 +24,16 @@ def home(request):
         'total_price': total_price,
     })
 
-@login_required
+
 def store(request):
     products = Product.objects.all()
     categorys = Category.objects.all()
-    order_items = OrderItem.objects.filter(order__user=request.user)
-    count_product_in_order_item = order_items.count()
+    if request.user.is_authenticated :
+        order_items = OrderItem.objects.filter(order__user=request.user)
+    else :
+        order_items = []
+    count_product_in_order_item = order_items.count() if order_items else 0
+    total_price = sum(item.total_price() for item in order_items)
     total_price = sum(item.total_price() for item in order_items)
 
     category_product_count = {}
@@ -42,13 +49,17 @@ def store(request):
         'total_price': total_price,
     })
 
-@login_required
+
 def product_detail(request, slug):
     product = Product.objects.get(slug=slug)
     product_images = ProductImage.objects.filter(product=product)
     related_products = Product.objects.filter(category__in=product.category.all()).exclude(id=product.id)
-    order_items = OrderItem.objects.filter(order__user=request.user)
-    count_product_in_order_item = order_items.count()
+    if request.user.is_authenticated :
+        order_items = OrderItem.objects.filter(order__user=request.user)
+    else :
+        order_items = []
+    count_product_in_order_item = order_items.count() if order_items else 0
+    total_price = sum(item.total_price() for item in order_items)
     total_price = sum(item.total_price() for item in order_items)
 
     return render(request, 'html/product.html', {
@@ -60,14 +71,18 @@ def product_detail(request, slug):
         'total_price': total_price,
     })
 
-@login_required
+
 def store_category(request, category_name):
     category = Category.objects.get(name=category_name)
     products_filter = Product.objects.filter(category=category)
     products = Product.objects.all()
     categorys = Category.objects.all()
-    order_items = OrderItem.objects.filter(order__user=request.user)
-    count_product_in_order_item = order_items.count()
+    if request.user.is_authenticated :
+        order_items = OrderItem.objects.filter(order__user=request.user)
+    else :
+        order_items = []
+    count_product_in_order_item = order_items.count() if order_items else 0
+    total_price = sum(item.total_price() for item in order_items)
     total_price = sum(item.total_price() for item in order_items)
 
     category_product_count = {}

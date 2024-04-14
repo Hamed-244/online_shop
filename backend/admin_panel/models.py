@@ -60,6 +60,7 @@ class Order(models.Model):
     status_choices = (
         ('pending', 'Pending'),
         ('delivering', 'Delivering'),
+        ('completed', 'Completed'),
         ('canceled', 'Canceled')
     )
 
