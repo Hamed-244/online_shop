@@ -29,7 +29,7 @@ const Dashboard = () => {
         
             // Make the fetch request with headers
             try {
-                const response = await fetch(import.meta.env.VITE_SIMPLE_REST_URL + '/dashboard-info', {
+                const response = await fetch(import.meta.env.VITE_REST_URL + '/dashboard-info', {
                     method: 'GET',
                     headers: headers
                 });

@@ -6,8 +6,8 @@ import {
   fetchUtils,
 } from "react-admin";
 
-const baseDataProvider = drfProvider(import.meta.env.VITE_SIMPLE_REST_URL , fetchJsonWithAuthJWTToken);
-const endpoint = import.meta.env.VITE_SIMPLE_REST_URL;
+const baseDataProvider = drfProvider(import.meta.env.VITE_REST_URL , fetchJsonWithAuthJWTToken);
+const endpoint = import.meta.env.VITE_REST_URL;
 
 type ProductImagesParams = {
   id: string;
