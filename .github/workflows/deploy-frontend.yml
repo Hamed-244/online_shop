@@ -18,4 +18,4 @@ jobs:
         cd frontend
         # Add commands to deploy frontend here
         npm i -g @liara/cli@5
-        liara deploy --app="admin-electro" --api-token="$LIARA_TOKEN" --no-app-logs --port=5173 --build-location="germany" --platform=node
+        liara deploy --app="admin-electro" --api-token="$LIARA_TOKEN" --no-app-logs --port=5173 --build-location="germany" --platform=node --debug

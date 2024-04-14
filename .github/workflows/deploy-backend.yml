@@ -18,4 +18,4 @@ jobs:
         cd backend
         # Add commands to deploy backend here
         npm i -g @liara/cli@5
-        liara deploy --app="electro" --api-token="$LIARA_TOKEN" --no-app-logs --port=80 --build-location="germany" --platform=django
+        liara deploy --app="electro" --api-token="$LIARA_TOKEN" --no-app-logs --port=80 --build-location="germany" --platform=django --debug
