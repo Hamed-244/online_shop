@@ -9,11 +9,15 @@ from django.db.models import Count, Sum
 def home(request):
     categorys = Category.objects.all()
     products = Product.objects.all()[0:10]
-    if request.user.is_authenticated :
-        order = Order.objects.get_or_create(user=request.user, status='pending')
-        order_items = OrderItem.objects.filter(order=order[0].id)
-    else :
-        order_items = []
+    orders = Order.objects.filter(user=request.user, status='pending')
+    if orders.exists():
+        
+        order = orders.order_by('-created_at').last()
+    else:
+        order = Order.objects.create(user=request.user, status='pending')
+   
+    order_items = OrderItem.objects.filter(order=order.id)
+
     count_product_in_order_item = order_items.count() if order_items else 0
     total_price = sum(item.total_price() for item in order_items)
 
@@ -29,11 +33,17 @@ def home(request):
 def store(request):
     products = Product.objects.all()
     categorys = Category.objects.all()
-    if request.user.is_authenticated :
-        order = Order.objects.get_or_create(user=request.user, status='pending')
-        order_items = OrderItem.objects.filter(order=order[0].id)
-    else :
-        order_items = []
+    orders = Order.objects.filter(user=request.user, status='pending')
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user, status='pending')
+        if orders.exists():
+            order = orders.order_by('-created_at').last()
+        else:
+            order = Order.objects.create(user=request.user, status='pending')
+        order_items = OrderItem.objects.filter(order=order.id)
+    else:
+        print("You must be logged in to create an order.")
+        
     count_product_in_order_item = order_items.count() if order_items else 0
     total_price = sum(item.total_price() for item in order_items)
     total_price = sum(item.total_price() for item in order_items)
@@ -195,4 +205,28 @@ def show_order(request):
     orders = Order.objects.all()
     return render(request, 'html/show_order.html', {
         'orders': orders,
+    })
+
+
+def login(request):
+    return render(request, 'html/login.html')
+
+
+@csrf_exempt
+def cancel_order(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        order = Order.objects.get(id=order_id)
+        order.status = 'canceled'
+        order.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+@login_required
+def show_feedback(request):
+    feedbacks = Feedback.objects.all()
+    return render(request, 'html/show_order.html', {
+        'feedback': feedbacks,
     })
