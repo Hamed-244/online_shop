@@ -1,0 +1,21 @@
+name: Deploy Project Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Deploy Frontend
+      env:
+        LIARA_TOKEN: ${{secrets.LIARA_API_TOKEN}}
+      run: |
+        cd frontend
+        ls -la
+        npm i -g @liara/cli@5
+        liara deploy --app="admin-electro" --api-token="$LIARA_TOKEN" --port=5173 --platform=node --debug

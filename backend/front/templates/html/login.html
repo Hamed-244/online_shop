@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/login.css' %}"/>
+</head>
+<body>
+    <div id="login">
+        <form>
+          <h1>Sign In</h1>
+          <input type="text" id="username" placeholder="Username">
+          <input type="password" id="password" placeholder="Password">
+          {% csrf_token %}
+          <button>login</button>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        document.querySelector('#login form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var username = document.querySelector('#username').value;
+    var password = document.querySelector('#password').value;
+    console.log(username , password)
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch('/api/v1/auth/login/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // Add the CSRF token to the request headers
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        if (data.access) {
+            alert('Login successful');
+            document.location.href="/";
+        } else {
+            alert('Login failed');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+
+    </script>
+</body>
+</html>
