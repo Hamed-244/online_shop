@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/v1/rest-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/v1/admin/', include('admin_panel.urls')),
     path('api/v1/auth/', include('authentication.urls')),
+    path('', include('front.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
