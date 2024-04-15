@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from admin_panel.models import Category, Product, ProductImage, OrderItem, ShippingAddress, Feedback, Order, Payment
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -9,14 +9,12 @@ from django.db.models import Count, Sum
 def home(request):
     categorys = Category.objects.all()
     products = Product.objects.all()[0:10]
-    orders = Order.objects.filter(user=request.user, status='pending')
-    if orders.exists():
-        
-        order = orders.order_by('-created_at').last()
+    if request.user.is_authenticated:
+        order = Order.objects.get_or_create(user=request.user, status='pending')[0]
+        order_items = OrderItem.objects.filter(order=order.id)
+
     else:
-        order = Order.objects.create(user=request.user, status='pending')
-   
-    order_items = OrderItem.objects.filter(order=order.id)
+        order_items = []
 
     count_product_in_order_item = order_items.count() if order_items else 0
     total_price = sum(item.total_price() for item in order_items)
@@ -33,7 +31,7 @@ def home(request):
 def store(request):
     products = Product.objects.all()
     categorys = Category.objects.all()
-    orders = Order.objects.filter(user=request.user, status='pending')
+
     if request.user.is_authenticated:
         orders = Order.objects.filter(user=request.user, status='pending')
         if orders.exists():
@@ -42,7 +40,7 @@ def store(request):
             order = Order.objects.create(user=request.user, status='pending')
         order_items = OrderItem.objects.filter(order=order.id)
     else:
-        print("You must be logged in to create an order.")
+        order_items = []
         
     count_product_in_order_item = order_items.count() if order_items else 0
     total_price = sum(item.total_price() for item in order_items)

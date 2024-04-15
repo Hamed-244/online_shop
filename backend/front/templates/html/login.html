@@ -11,8 +11,9 @@
     <div id="login">
         <form>
           <h1>Sign In</h1>
-          <input type="text" placeholder="Username">
-          <input type="password" placeholder="Password">
+          <input type="text" id="username" placeholder="Username">
+          <input type="password" id="password" placeholder="Password">
+          {% csrf_token %}
           <button>login</button>
         </form>
     </div>
@@ -21,9 +22,9 @@
         document.querySelector('#login form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    var username = document.querySelector('input[type="text"]').value;
-    var password = document.querySelector('input[type="password"]').value;
-
+    var username = document.querySelector('#username').value;
+    var password = document.querySelector('#password').value;
+    console.log(username , password)
     var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     fetch('/api/v1/auth/login/', {
@@ -40,10 +41,12 @@
     })
     .then(response => response.json())
     .then(data => {
-        if (data.key) {
-            console.log('Login successful');
+        console.log(data)
+        if (data.access) {
+            alert('Login successful');
+            document.location.href="/";
         } else {
-            console.log('Login failed');
+            alert('Login failed');
         }
     })
     .catch((error) => {

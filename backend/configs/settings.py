@@ -160,7 +160,7 @@ REST_AUTH = {
 
     'OLD_PASSWORD_FIELD_ENABLED': True,
     'LOGOUT_ON_PASSWORD_CHANGE': True,
-    'SESSION_LOGIN': False,
+    'SESSION_LOGIN': True,
     'USE_JWT': True,
 
     'JWT_AUTH_COOKIE': "access",
