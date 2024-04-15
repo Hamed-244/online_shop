@@ -51,8 +51,13 @@ export const UserShow = () => (
 export const UserEdit = () => (
     <Edit>
         <SimpleForm>
+            <ImageField source="profile_image" title="Last Image" />
+            <ImageInput source="profile_image">
+                <ImageField source="src" title="Preview" />
+            </ImageInput>
             <NumberInput disabled label="Id" source="id" />
             <TextInput label="Username" source="username" validate={required()} />
+            <PasswordInput source="password" ></PasswordInput>
             <TextInput label="First Name" source="first_name" validate={required()} />
             <TextInput label="Last Name" source="last_name" validate={required()} />
             <TextInput label="Email" source="email" type="email" validate={required()} />
@@ -69,6 +74,9 @@ export const UserEdit = () => (
 export const UserCreate = () => (
     <Create >
         <SimpleForm>
+            <ImageInput source="profile_image">
+                <ImageField source="src" title="Preview" />
+            </ImageInput>
             <TextInput label="Username" source="username" validate={required()} />
             <PasswordInput label="Password" source="password" validate={required()} />
             <TextInput label="First Name" source="first_name" validate={required()} />

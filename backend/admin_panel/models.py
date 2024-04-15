@@ -63,7 +63,7 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL , null=True, related_name="orders")
     shipping_address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, null=True, related_name="orders")
     status = models.CharField(max_length=10, choices=status_choices , default='pending')
-    order_date = models.DateTimeField(blank=True)
+    order_date = models.DateTimeField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -148,3 +148,14 @@ class Notice(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class AdminLog(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    ip_address = models.CharField(max_length=100, null=True, blank=True)
+    action = models.CharField(max_length=100)
+    details = models.TextField()
+
+    def __str__(self):
+        return f"{self.timestamp} - {self.action}"
