@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice)
+from admin_panel.models import (Product,Category,ProductImage,ShippingAddress,Order,OrderItem,Payment,Feedback,Notice,AdminLog)
 from django.contrib.auth.hashers import make_password
 from allauth.account.models import EmailAddress
 from django.utils.translation import gettext_lazy as _
@@ -22,7 +22,7 @@ class UserListSerializer(serializers.ModelSerializer):
 class UserModifySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude=["profile_image",]
+        fields="__all__"
     
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
@@ -31,7 +31,7 @@ class UserModifySerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        if 'password' in validated_data:
+        if 'password' in validated_data and validated_data['password'] != instance.password:
             validated_data['password'] = make_password(validated_data['password'])
         user = super(UserModifySerializer, self).update(instance, validated_data)
         email = user.email
@@ -118,4 +118,11 @@ class NoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notice
+        fields = "__all__"
+
+
+class AdminLogSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AdminLog
         fields = "__all__"

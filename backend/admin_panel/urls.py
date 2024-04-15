@@ -14,9 +14,10 @@ router.register(r'order-items', views.OrderItemCrudViewSet)
 router.register(r'payments', views.PaymentCrudViewSet)
 router.register(r'feedbacks', views.FeedbackCrudViewSet)
 router.register(r'notices', views.NoticeCrudViewSet)
+router.register(r'logs', views.AdminLogViewSet)
 
 urlpatterns = [
-
+    path('dashboard-info', views.DashboardInfoApi.as_view())
 ]
 
 # add viewsets urls to urlpatterns
