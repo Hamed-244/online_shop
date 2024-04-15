@@ -182,7 +182,7 @@
                 <h3 class="product-name">{{ order.created_at }}</h3>
             </div>
             <div class="add-to-cart add-to-cart-btn">
-                <button class="add-to-cart-btn" data-product-id="{{ product.id }}"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                <button class="add-to-cart-btn" data-product-id="{{ order.id }}"><i class="fa fa-shopping-cart"></i>cancel</button>
             </div>
         </div>
     </div>
@@ -200,23 +200,24 @@
 <script>
 $(document).ready(function(){
   $(".add-to-cart-btn").click(function(){
-    var productId = $(this).data('product-id');
+    var orderId = $(this).data('product-id');
     $.ajax({
-      url: '/add_to_cart/',  // URL of your view that will handle the request
+      url: '/cancel_order/',  // URL of your view that will handle the request
       data: {
-        'product_id': productId,
+        'order_id': orderId,
         'csrfmiddlewaretoken': '{{ csrf_token }}'
       },
       type: 'POST',
       dataType: 'json',
       success: function(data) {
         if (data.success) {
-          alert("Product added to cart.");
+          alert("Order canceled.");
         }
       }
     });
   });
 });
+
 </script>
 
 

@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/login.css' %}"/>
+</head>
+<body>
+    <div id="login">
+        <form>
+          <h1>Sign In</h1>
+          <input type="text" placeholder="Username">
+          <input type="email" placeholder="Email">
+          <input type="text" placeholder="First name">
+          <input type="text" placeholder="Last name">
+          <input type="text" placeholder="Phone number">
+          <input type="password" placeholder="Password1">
+          <input type="password" placeholder="Password2">
+          <button>register</button>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        document.querySelector('#login form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var username = document.querySelector('input[type="text"]').value;
+    var password = document.querySelector('input[type="password"]').value;
+
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch('/api/v1/auth/register/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.key) {
+            console.log('Login successful');
+        } else {
+            console.log('Login failed');
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+
+    </script>
+</body>
+</html>
