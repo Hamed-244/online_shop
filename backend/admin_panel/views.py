@@ -67,7 +67,7 @@ class CategoryCrudViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
     search_fields = ['name' , 'description']
     ordering_fields = '__all__'
-    filterset_fields = '__all__'
+    filterset_fields = ['name', 'description', 'parent_category', 'updated_at', 'created_at']
     
     permission_classes = [permissions.IsAdminUser]
     @log_action("create", Category)
@@ -91,7 +91,7 @@ class ProductCrudViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter,filters.SearchFilter,DjangoFilterBackend]
     search_fields = ['name' , 'description' , 'slug']
     ordering_fields = '__all__'
-    filterset_fields = '__all__'
+    filterset_fields = ['name','slug','description','price','amount','category']
     
     permission_classes = [permissions.IsAdminUser]
     @log_action("create", Product)

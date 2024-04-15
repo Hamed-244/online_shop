@@ -62,6 +62,72 @@ const createUserFormData = (
   return formData;
 };
 
+
+type ProductParams = {
+  id: string;
+  product: string;
+  image: {
+    rawFile: File;
+    src?: string;
+    title?: string;
+  };
+  name: string;
+  slug: string;
+  description: string;
+  price: string;
+  amount: string;
+  category: string;
+};
+
+const createProductFormData = (
+  params: CreateParams<ProductParams> | UpdateParams<ProductParams>
+) => {
+  const formData = new FormData();
+  params.data.image?.rawFile && formData.append("image", params.data.image.rawFile);
+  params.data.product && formData.append("product", params.data.product);
+  params.data.name && formData.append("name", params.data.name);
+  params.data.slug && formData.append("slug", params.data.slug);
+  params.data.description && formData.append("description", params.data.description);
+  params.data.amount && formData.append("amount", params.data.amount);
+  params.data.price && formData.append("price", params.data.price);
+  params.data.category && formData.append("category", params.data.category);
+
+  return formData;
+};
+
+type CategoryParams = {
+  id: string;
+  image: {
+    rawFile: File;
+    src?: string;
+    title?: string;
+  };
+  name: string;
+  slug: string;
+  description: string;
+  updated_at: string;
+  created_at: string;
+  parent_category: string;
+};
+
+const createCategoryFormData = (
+  params: CreateParams<CategoryParams> | UpdateParams<CategoryParams>
+) => {
+  const formData = new FormData();
+  params.data.image?.rawFile && formData.append("image", params.data.image.rawFile);
+  params.data.name && formData.append("name", params.data.name);
+  params.data.slug && formData.append("slug", params.data.slug);
+  params.data.description && formData.append("description", params.data.description);
+  params.data.updated_at && formData.append("updated_at", params.data.updated_at);
+  params.data.parent_category && formData.append("parent_category", params.data.parent_category);
+  params.data.created_at && formData.append("created_at", params.data.created_at);
+
+  return formData;
+};
+
+
+
+
 const getHeaders = () => {
   const token = localStorage.getItem('access');
   console.log(token)
@@ -93,6 +159,26 @@ export const dataProvider: DataProvider = {
         })
         .then(({ json }) => ({ data: json }));
     }
+    else if (resource === "products") {
+      const formData = createProductFormData(params);
+      return fetchUtils
+        .fetchJson(`${endpoint}/${resource}/`, {
+          method: "POST",
+          body: formData,
+          headers: getHeaders()
+        })
+        .then(({ json }) => ({ data: json }));
+    }
+    else if (resource === "categories") {
+      const formData = createCategoryFormData(params);
+      return fetchUtils
+        .fetchJson(`${endpoint}/${resource}/`, {
+          method: "POST",
+          body: formData,
+          headers: getHeaders()
+        })
+        .then(({ json }) => ({ data: json }));
+    }
 
     return baseDataProvider.create(resource, params);
   },
@@ -110,6 +196,26 @@ export const dataProvider: DataProvider = {
     }
     else if (resource === "users") {
       const formData = createUserFormData(params);
+      return fetchUtils
+        .fetchJson(`${endpoint}/${resource}/${params.id}/`, {
+          method: "PUT",
+          body: formData,
+          headers: getHeaders()
+        })
+        .then(({ json }) => ({ data: json }));
+    }
+    else if (resource === "products") {
+      const formData = createProductFormData(params);
+      return fetchUtils
+        .fetchJson(`${endpoint}/${resource}/${params.id}/`, {
+          method: "PUT",
+          body: formData,
+          headers: getHeaders()
+        })
+        .then(({ json }) => ({ data: json }));
+    }
+    else if (resource === "categories") {
+      const formData = createCategoryFormData(params);
       return fetchUtils
         .fetchJson(`${endpoint}/${resource}/${params.id}/`, {
           method: "PUT",
